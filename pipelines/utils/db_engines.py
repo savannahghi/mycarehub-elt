@@ -6,12 +6,12 @@ from sqlalchemy.engine import create_engine
 secret_manager_client = secretmanager.SecretManagerServiceClient()
 ssl_mode = "?sslmode=require"
 
-mycarehub_uri = secret_manager_client.access_secret_version(
-    "projects/rdo-reporting/secrets/mycarehub_uri/versions/1"
+mch_cloudsql_uri = secret_manager_client.access_secret_version(
+    "projects/rdo-reporting/secrets/mch_cloudsql_uri/versions/1"
 ).payload.data.decode("utf-8")
-mycarehub_uri += ssl_mode
+mch_cloudsql_uri += ssl_mode
 
 # Generate DB engines
 mycarehub_engine = create_engine(
-    mycarehub_uri
+    mch_cloudsql_uri
 )
