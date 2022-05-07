@@ -11,7 +11,7 @@ from pipelines.utils import config, db_engines
 default_args = {
     "owner": "mycarehub",
     "depends_on_past": False,
-    "start_date": datetime(2021, 10, 12),
+    "start_date": datetime(2020, 10, 12),
     "email": ["airflow@example.com"],
     "email_on_failure": False,
     "email_on_retry": False,
