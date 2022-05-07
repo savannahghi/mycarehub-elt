@@ -29,7 +29,7 @@ etl_dag = DAG(
 
 users_ext = PythonOperator(
     task_id="users_extract_to_gcs",
-    python_callable=trigger.trigger_to_gcs(),
+    python_callable=trigger.trigger_to_gcs,
     op_kwargs={'folder': config.mch_users_fold,
                'engine': db_engines.mycarehub_engine,
                'bucket': config.mch_users_bket},
