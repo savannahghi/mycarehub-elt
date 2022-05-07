@@ -15,7 +15,7 @@ class QueryFeed:
         files = [
             f.name
             for f in gcs_client.list_blobs(
-                bucket_or_name=config.queries, prefix=query_folder
+                bucket_or_name=config.mycarehub_queries, prefix=query_folder
             )
             if ".sql" in f.name
         ]
@@ -28,7 +28,7 @@ class QueryFeed:
             location = [
                 f"{bucket}/{(file.name.split('.')[0]).split('/')[-1]}"
                 for file in gcs_client.list_blobs(
-                    bucket_or_name=config.queries, prefix=query_folder
+                    bucket_or_name=config.mycarehub_queries, prefix=query_folder
                 )
                 if ".sql" in file.name
             ]
@@ -36,7 +36,7 @@ class QueryFeed:
             location = [
                 f"{dataset}.{(file.name.split('.')[0]).split('/')[-1]}"
                 for file in gcs_client.list_blobs(
-                    bucket_or_name=config.queries, prefix=query_folder
+                    bucket_or_name=config.mycarehub_queries, prefix=query_folder
                 )
                 if ".sql" in file.name
             ]
@@ -46,7 +46,7 @@ class QueryFeed:
     def read_queries(self, query_folder):
         """Read Query."""
         files = self.get_sql_files(query_folder)
-        bucket = gcs_client.get_bucket(config.queries)
+        bucket = gcs_client.get_bucket(config.mycarehub_queries)
         file_contents = []
         for file in files:
             blob = bucket.blob(file)

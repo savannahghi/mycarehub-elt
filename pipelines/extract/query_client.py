@@ -8,7 +8,7 @@ from pipelines.utils import google_clients, config
 
 logging.basicConfig(level=logging.INFO)
 gcs_client = google_clients.initialize_gcs_client()
-folder = config.queries
+folder = config.mycarehub_queries
 
 
 class DataClient:
