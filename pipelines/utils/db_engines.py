@@ -7,7 +7,7 @@ secret_manager_client = secretmanager.SecretManagerServiceClient()
 ssl_mode = "?sslmode=require"
 
 mch_cloudsql_uri = secret_manager_client.access_secret_version(
-    "projects/rdo-reporting/secrets/mch_cloudsql_uri/versions/1"
+    "projects/sghi-307909/secrets/mch_cloudsql_uri/versions/1"
 ).payload.data.decode("utf-8")
 mch_cloudsql_uri += ssl_mode
 
