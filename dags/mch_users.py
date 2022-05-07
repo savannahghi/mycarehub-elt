@@ -36,8 +36,8 @@ users_ext = PythonOperator(
     dag=etl_dag
 )
 
-dwapi_load_bquery = PythonOperator(
-    task_id="dwapi_load_to_bquery",
+users_load = PythonOperator(
+    task_id="users_load_to_bquery",
     python_callable=trigger.trigger_to_bquery,
     op_kwargs={'folder': config.mch_users_fold,
                'dataset': config.mch_users_dset,
@@ -46,4 +46,4 @@ dwapi_load_bquery = PythonOperator(
 )
 
 # Task Dependencies
-dwapi_ext_gcs >> dwapi_load_bquery
+users_ext >> users_load
