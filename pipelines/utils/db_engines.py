@@ -13,5 +13,12 @@ mch_cloudsql_uri += ssl_mode
 
 # Generate DB engines
 mycarehub_engine = create_engine(
-    mch_cloudsql_uri
+    mch_cloudsql_uri,
+    connect_args={
+        "ssl": {
+            "ssl_ca": "/opt/mycarehub/plugins/certs/server-ca.pem",
+            "ssl_cert": "/opt/mycarehub/plugins/certs/client-cert.pem",
+            "ssl_key": "/opt/mycarehub/plugins/certs/client-key.pem"
+        }
+    }
 )
