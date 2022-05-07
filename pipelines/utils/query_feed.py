@@ -19,6 +19,7 @@ class QueryFeed:
             )
             if ".sql" in f.name
         ]
+        print(files)
         return files
 
     def get_location_names(self, query_folder, bucket=None, dataset=None):
@@ -39,6 +40,7 @@ class QueryFeed:
                 )
                 if ".sql" in file.name
             ]
+        print(location)
         return location
 
     def read_queries(self, query_folder):
@@ -50,6 +52,7 @@ class QueryFeed:
             blob = bucket.blob(file)
             query = blob.download_as_text()
             file_contents.append(query)
+        print(file_contents)
         return file_contents
 
     def create_query_dict(self, query_folder, bucket=None, dataset=None):
@@ -58,4 +61,5 @@ class QueryFeed:
         file_contents = self.read_queries(query_folder)
         location = self.get_location_names(query_folder, bucket, dataset)
         files = dict(zip(location, file_contents))
+        print(files)
         return files
