@@ -7,7 +7,7 @@ from pipelines.utils import google_clients, query_feed
 
 def trigger_to_gcs(folder, engine, bucket):
     """Trigger extraction pipeline."""
-    print('Dag has started')
+    print('Wewe Mbwa Wewe')
     gcs_client = google_clients.initialize_gcs_client()
     queries = query_feed.QueryFeed(folder=folder,
                                    bucket=bucket).create_query_dict(
