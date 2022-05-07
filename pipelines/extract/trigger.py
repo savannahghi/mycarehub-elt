@@ -7,15 +7,11 @@ from pipelines.utils import google_clients, query_feed
 
 def trigger_to_gcs(folder, engine, bucket):
     """Trigger extraction pipeline."""
-    print(folder)
-    print(bucket)
-    print(engine)
     gcs_client = google_clients.initialize_gcs_client()
     queries = query_feed.QueryFeed(folder=folder,
                                    bucket=bucket).create_query_dict(
         query_folder=folder, bucket=bucket
     )
-    print(queries)
     client = query_client.DataClient(gcs_client)
     for location, query in queries.items():
         fetch_rows = client.fetch_rows(query, engine, location)
