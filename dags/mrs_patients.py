@@ -20,7 +20,7 @@ default_args = {
 }
 
 etl_dag = DAG(
-    dag_id="mrs_patients",
+    dag_id="emr_patients",
     description="Patients on OpenMRS",
     schedule_interval="0 */4 * * *",
     default_args=default_args,
