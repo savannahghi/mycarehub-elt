@@ -44,12 +44,12 @@ content_load = PythonOperator(
                'bucket': config.mch_content_bket},
     dag=etl_dag
 )
-# patients_staging = PythonOperator(
-#     task_id="mch_patients_staging",
-#     python_callable=run.trigger_staging,
-#     op_kwargs={'folder': config.mch_users_staging_fold,
-#                'dataset': config.mch_users_dset},
-#     dag=etl_dag
-# )
+content_staging = PythonOperator(
+    task_id="mch_content_staging",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.mch_content_staging_fold,
+               'dataset': config.mch_content_dset},
+    dag=etl_dag
+)
 # Task Dependencies
-content_ext >> content_load
+content_ext >> content_load >> content_staging
