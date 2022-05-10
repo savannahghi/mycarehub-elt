@@ -37,7 +37,7 @@ content_ext = PythonOperator(
 )
 
 content_load = PythonOperator(
-    task_id="users_load_to_bquery",
+    task_id="content_load_to_bquery",
     python_callable=trigger.trigger_to_bquery,
     op_kwargs={'folder': config.mch_content_fold,
                'dataset': config.mch_content_dset,
