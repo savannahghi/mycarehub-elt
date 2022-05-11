@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from pipelines.extract import trigger
-
+from pipelines.staging import run
 from pipelines.utils import config, db_engines
 
 # Initialize DAG
@@ -44,6 +44,13 @@ patients_load = PythonOperator(
                'bucket': config.emr_patients_bket},
     dag=etl_dag
 )
+patients_staging = PythonOperator(
+    task_id="openmrs_patients_staging",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.emr_patients_staging_fold,
+               'dataset': config.emr_patients_dset},
+    dag=etl_dag
+)
 
 # Task Dependencies
-patients_ext >> patients_load
+patients_ext >> patients_load >> patients_staging
