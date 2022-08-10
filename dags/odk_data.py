@@ -44,5 +44,13 @@ odk_load = PythonOperator(
                'bucket': config.odk_data_bket},
     dag=etl_dag
 )
+
+odk_staging = PythonOperator(
+    task_id="odk_staging_staging",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.odk_data_staging_fold,
+               'dataset': config.odk_data_dset},
+    dag=etl_dag
+)
 # Task Dependencies
-odk_ext >> odk_load
+odk_ext >> odk_load >> odk_staging
