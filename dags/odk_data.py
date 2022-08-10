@@ -46,7 +46,7 @@ odk_load = PythonOperator(
 )
 
 odk_staging = PythonOperator(
-    task_id="odk_staging_staging",
+    task_id="odk_staging",
     python_callable=run.trigger_staging,
     op_kwargs={'folder': config.odk_data_staging_fold,
                'dataset': config.odk_data_dset},

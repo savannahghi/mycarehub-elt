@@ -56,7 +56,7 @@ class DataClient:
         self.table_name = table
         # Set up Parameters for Query
         job = bigquery.QueryJobConfig()
-        query = query.format(dataset=site)
+        #query = query.format(dataset=site)
         job.destination = table
         job.write_disposition = bigquery.WriteDisposition().WRITE_TRUNCATE
         job.create_disposition = bigquery.CreateDisposition().CREATE_IF_NEEDED
