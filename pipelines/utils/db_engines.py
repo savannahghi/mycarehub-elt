@@ -14,7 +14,9 @@ openmrs_cloudsql_uri = secret_manager_client.access_secret_version(
 odk_cloudsql_uri = secret_manager_client.access_secret_version(
     "projects/sghi-307909/secrets/odk_cloudsql_uri/versions/1"
 ).payload.data.decode("utf-8")
-
+mch_content_uri = secret_manager_client.access_secret_version(
+    "projects/sghi-307909/secrets/mch_content_uri/versions/1"
+).payload.data.decode("utf-8")
 # Generate DB engines
 mycarehub_engine = create_engine(
     mch_cloudsql_uri,
@@ -24,4 +26,7 @@ openmrs_engine = create_engine(
 )
 odk_engine = create_engine(
     odk_cloudsql_uri,
+)
+mycarehub_content_engine = create_engine(
+    mch_content_uri,
 )
