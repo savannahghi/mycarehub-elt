@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from pipelines.extract import trigger
+from pipelines.staging import run
 
 from pipelines.utils import config, db_engines
 
@@ -45,5 +46,13 @@ service_requests_load = PythonOperator(
     dag=etl_dag
 )
 
+service_requests_staging = PythonOperator(
+    task_id="mch_patients_staging",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.mch_service_requests_staging_fold,
+               'dataset': config.mch_service_requests_dset},
+    dag=etl_dag
+)
+
 # Task Dependencies
-service_requests_ext >> service_requests_load
+service_requests_ext >> service_requests_load >> service_requests_staging
