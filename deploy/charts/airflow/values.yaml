@@ -1354,7 +1354,7 @@ dags:
   gitSync:
     ## if the git-sync sidecar container is enabled
     ##
-    enabled: false
+    enabled: true
 
     ## the git-sync container image
     ##
@@ -1381,7 +1381,7 @@ dags:
     ##   # ssh git repo
     ##   repo: "git@github.com:USERNAME/REPOSITORY.git"
     ##
-    repo: ""
+    repo: "git@github.com:savannahghi/mycarehub-elt.git"
 
     ## the sub-path within your repo where dags are located
     ## - only dags under this path within your repo will be seen by airflow,
@@ -1391,7 +1391,7 @@ dags:
 
     ## the git branch to check out
     ##
-    branch: master
+    branch: main
 
     ## the git revision (tag or hash) to check out
     ##
@@ -1456,7 +1456,7 @@ dags:
 ingress:
   ## if we should deploy Ingress resources
   ##
-  enabled: false
+  enabled: true
 
   ## the `apiVersion` to use for Ingress resources
   ## - for Kubernetes 1.19 and later: "networking.k8s.io/v1"
@@ -1482,16 +1482,16 @@ ingress:
     ##   # webserver URL: http://example.com/airflow
     ##   path: "/airflow"
     ##
-    path: ""
+    path: "/"
 
     ## the hostname for the web Ingress
     ##
-    host: ""
+    host: "mycarehub.pipeline.savannahghi.org"
 
     ## the Ingress Class for the web Ingress
     ## - [WARNING] requires Kubernetes 1.18 or later, use "kubernetes.io/ingress.class" annotation for older versions
     ##
-    ingressClassName: ""
+    ingressClassName: "kong"
 
     ## configs for web Ingress TLS
     ##
