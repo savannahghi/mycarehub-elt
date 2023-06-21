@@ -25,6 +25,7 @@ def gcp_authentication():
             "https://www.googleapis.com/auth/devstorage.full_control",
             "https://www.googleapis.com/auth/devstorage.read_only",
             "https://www.googleapis.com/auth/devstorage.read_write",
+            "https://www.googleapis.com/auth/cloud-platform",
         ],
     )
     return credentials
