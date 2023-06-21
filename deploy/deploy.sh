@@ -31,7 +31,7 @@ helm upgrade \
     --namespace "${NAMESPACE}" \
     --wait \
     --version "8.7.1" \
-    --timeout 900s \
+    --timeout 1200s \
     -f ./charts/airflow/values.yaml \
     $APP_NAME \
     airflow-stable/airflow
