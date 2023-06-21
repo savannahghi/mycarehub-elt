@@ -10,7 +10,7 @@ airflow:
   ##
   image:
     repository: apache/airflow
-    tag: 2.5.3-python3.8
+    tag: latest
     pullPolicy: IfNotPresent
     pullSecret: ""
     uid: 50000
@@ -20,7 +20,7 @@ airflow:
   ## - allowed values: "CeleryExecutor", "KubernetesExecutor", "CeleryKubernetesExecutor"
   ## - customize the "KubernetesExecutor" pod-template with `airflow.kubernetesPodTemplate.*`
   ##
-  executor: CeleryExecutor
+  executor: KubernetesExecutor
 
   ## the fernet encryption key (sets `AIRFLOW__CORE__FERNET_KEY`)
   ## - [WARNING] you must change this value to ensure the security of your airflow
@@ -837,7 +837,7 @@ web:
 workers:
   ## if the airflow workers StatefulSet should be deployed
   ##
-  enabled: true
+  enabled: false
 
   ## the number of worker Pods to run
   ## - if you set this >1 we recommend defining a `workers.podDisruptionBudget`
@@ -1137,7 +1137,7 @@ triggerer:
 flower:
   ## if the airflow flower UI should be deployed
   ##
-  enabled: true
+  enabled: false
 
   ## the number of flower Pods to run
   ## - if you set this >1 we recommend defining a `flower.podDisruptionBudget`
@@ -1428,7 +1428,7 @@ dags:
 
     ## the name of a pre-created Secret with git ssh credentials
     ##
-    sshSecret: ""
+    sshSecret: "airflow-ssh-git-secret"
 
     ## the key in `dags.gitSync.sshSecret` with your ssh-key file
     ##
@@ -1482,7 +1482,7 @@ ingress:
     ##   # webserver URL: http://example.com/airflow
     ##   path: "/airflow"
     ##
-    path: "/"
+    path: ""
 
     ## the hostname for the web Ingress
     ##
@@ -1884,7 +1884,7 @@ postgresql:
   ## - [WARNING] consider using an external database with `externalDatabase.*`
   ## - set to `false` if using `externalDatabase.*`
   ##
-  enabled: false
+  enabled: true
 
   ## configs for the postgres container image
   ##
@@ -1908,7 +1908,7 @@ postgresql:
 
   ## the name of a pre-created secret containing the postgres password
   ##
-  existingSecret: ""
+  existingSecret: "airflow-postgresql"
 
   ## the key within `postgresql.existingSecret` containing the password string
   ##
@@ -1964,59 +1964,59 @@ postgresql:
 ###################################
 ## DATABASE | External Database
 ###################################
-externalDatabase:
-  ## the type of external database
-  ## - allowed values: "mysql", "postgres"
-  ##
-  type: postgres
+# externalDatabase:
+#   ## the type of external database
+#   ## - allowed values: "mysql", "postgres"
+#   ##
+#   type: postgres
 
-  ## the host of the external database
-  ##
-  host: localhost
+#   ## the host of the external database
+#   ##
+#   host: localhost
 
-  ## the port of the external database
-  ##
-  port: 5432
+#   ## the port of the external database
+#   ##
+#   port: 5432
 
-  ## the database/scheme to use within the external database
-  ##
-  database: airflow
+#   ## the database/scheme to use within the external database
+#   ##
+#   database: airflow
 
-  ## the username for the external database
-  ##
-  user: airflow
+#   ## the username for the external database
+#   ##
+#   user: airflow
 
-  ## the name of a pre-created secret containing the external database user
-  ## - if set, this overrides `externalDatabase.user`
-  ##
-  userSecret: ""
+#   ## the name of a pre-created secret containing the external database user
+#   ## - if set, this overrides `externalDatabase.user`
+#   ##
+#   userSecret: ""
 
-  ## the key within `externalDatabase.userSecret` containing the user string
-  ##
-  userSecretKey: "postgresql-user"
+#   ## the key within `externalDatabase.userSecret` containing the user string
+#   ##
+#   userSecretKey: "postgresql-user"
 
-  ## the password for the external database
-  ## - [WARNING] to avoid storing the password in plain-text within your values,
-  ##   create a Kubernetes secret and use `externalDatabase.passwordSecret`
-  ##
-  password: ""
+#   ## the password for the external database
+#   ## - [WARNING] to avoid storing the password in plain-text within your values,
+#   ##   create a Kubernetes secret and use `externalDatabase.passwordSecret`
+#   ##
+#   password: ""
 
-  ## the name of a pre-created secret containing the external database password
-  ## - if set, this overrides `externalDatabase.password`
-  ##
-  passwordSecret: ""
+#   ## the name of a pre-created secret containing the external database password
+#   ## - if set, this overrides `externalDatabase.password`
+#   ##
+#   passwordSecret: ""
 
-  ## the key within `externalDatabase.passwordSecret` containing the password string
-  ##
-  passwordSecretKey: "postgresql-password"
+#   ## the key within `externalDatabase.passwordSecret` containing the password string
+#   ##
+#   passwordSecretKey: "postgresql-password"
 
-  ## extra connection-string properties for the external database
-  ##
-  ## ____ EXAMPLE _______________
-  ##   # require SSL (only for Postgres)
-  ##   properties: "?sslmode=require"
-  ##
-  properties: ""
+#   ## extra connection-string properties for the external database
+#   ##
+#   ## ____ EXAMPLE _______________
+#   ##   # require SSL (only for Postgres)
+#   ##   properties: "?sslmode=require"
+#   ##
+#   properties: ""
 
 ###################################
 ## DATABASE | Embedded Redis
@@ -2026,7 +2026,7 @@ redis:
   ## - set to `false` if `airflow.executor` is `KubernetesExecutor`
   ## - set to `false` if using `externalRedis.*`
   ##
-  enabled: true
+  enabled: false
 
   ## configs for the redis container image
   ##
