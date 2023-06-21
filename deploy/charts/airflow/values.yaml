@@ -256,13 +256,19 @@ airflow:
   ## - spec for VolumeMount:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#volumemount-v1-core
   ##
-  extraVolumeMounts: []
+  extraVolumeMounts:
+    - name: airflow-service-account
+      mountPath: "/secrets/gcp"
+      filePath: "/secrets/gcp/key.json"
 
   ## extra Volumes for the airflow Pods
   ## - spec for Volume:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#volume-v1-core
   ##
-  extraVolumes: []
+  extraVolumes:
+    - name: airflow-service-account
+      secret:
+        secretName: airflow-service-account
 
   ## kubernetes cluster domain name
   ## - configured in the kubelet with `--cluster-domain` flag (deprecated):
