@@ -6,17 +6,19 @@ from sqlalchemy.engine import create_engine
 secret_manager_client = secretmanager.SecretManagerServiceClient()
 
 mch_cloudsql_uri = secret_manager_client.access_secret_version(
-    "projects/sghi-307909/secrets/mch_cloudsql_uri/versions/latest"
-).payload.data.decode("utf-8")
+    request={"name": "projects/sghi-307909/secrets/mch_cloudsql_uri/versions/latest"}
+)
 openmrs_cloudsql_uri = secret_manager_client.access_secret_version(
-    "projects/sghi-307909/secrets/openmrs_cloudsql_uri/versions/latest"
-).payload.data.decode("utf-8")
+    request={
+        "name": "projects/sghi-307909/secrets/openmrs_cloudsql_uri/versions/latest"}
+)
 odk_cloudsql_uri = secret_manager_client.access_secret_version(
-    "projects/sghi-307909/secrets/odk_cloudsql_uri/versions/latest"
-).payload.data.decode("utf-8")
+    request={"name": "projects/sghi-307909/secrets/odk_cloudsql_uri/versions/latest"}
+)
 mch_content_uri = secret_manager_client.access_secret_version(
-    "projects/sghi-307909/secrets/mch_content_uri/versions/latest"
-).payload.data.decode("utf-8")
+    request={"name": "projects/sghi-307909/secrets/mch_content_uri/versions/latest"}
+)
+
 # Generate DB engines
 mycarehub_engine = create_engine(
     mch_cloudsql_uri,

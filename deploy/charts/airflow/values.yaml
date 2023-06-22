@@ -249,7 +249,7 @@ airflow:
   ##
   extraEnv: 
     - name: GOOGLE_APPLICATION_CREDENTIALS
-      value: /secrets/gcp/key.json
+      value: "/secrets/gcp/key.json"
 
   ## extra containers for the airflow Pods
   ## - spec for Container:
