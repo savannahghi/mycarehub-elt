@@ -10,7 +10,7 @@ def gcp_authentication():
     # Set Google Credentials from Secret Manager
     secret_manager_client = secretmanager.SecretManagerServiceClient()
     service_account_file = secret_manager_client.access_secret_version(
-        "projects/sghi-307909/secrets/mycarehub-elt/versions/1"
+        request={"name": "projects/sghi-307909/secrets/mycarehub-elt/versions/latest"}
     ).payload.data.decode("utf-8")
 
     # Convert Credentials to python object
