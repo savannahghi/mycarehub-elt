@@ -249,10 +249,7 @@ airflow:
   ##
   extraEnv: 
     - name: GOOGLE_APPLICATION_CREDENTIALS
-      valueFrom:
-        secretKeyRef:
-          name: airflow-service-account
-          key: key.json
+      value: /secrets/gcp/key.json
 
   ## extra containers for the airflow Pods
   ## - spec for Container:
@@ -267,7 +264,6 @@ airflow:
   extraVolumeMounts:
     - name: airflow-service-account
       mountPath: "/secrets/gcp"
-      filePath: "/secrets/gcp/key.json"
 
   ## extra Volumes for the airflow Pods
   ## - spec for Volume:
