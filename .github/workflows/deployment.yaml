@@ -1,4 +1,4 @@
-name: Matrix Deployment
+name: Airflow Deployment
 
 on: [push]
 
