@@ -1,10 +1,10 @@
 -e .
 
 google-cloud-bigquery >=2.19.0
-SQLAlchemy == 1.4.22
+SQLAlchemy==2.0.16
 pytest ==6.2.4
 pybigquery==0.5.0
-psycopg2-binary ~= 2.8
+psycopg2-binary==2.9.6
 google-cloud == 0.34.0
 google-cloud-secret-manager==2.16.1
 google-cloud-storage==2.9.0

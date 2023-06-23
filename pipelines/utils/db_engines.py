@@ -7,17 +7,17 @@ secret_manager_client = secretmanager.SecretManagerServiceClient()
 
 mch_cloudsql_uri = secret_manager_client.access_secret_version(
     request={"name": "projects/sghi-307909/secrets/mch_cloudsql_uri/versions/latest"}
-)
+).payload.data.decode("utf-8")
 openmrs_cloudsql_uri = secret_manager_client.access_secret_version(
     request={
         "name": "projects/sghi-307909/secrets/openmrs_cloudsql_uri/versions/latest"}
-)
+).payload.data.decode("utf-8")
 odk_cloudsql_uri = secret_manager_client.access_secret_version(
     request={"name": "projects/sghi-307909/secrets/odk_cloudsql_uri/versions/latest"}
-)
+).payload.data.decode("utf-8")
 mch_content_uri = secret_manager_client.access_secret_version(
     request={"name": "projects/sghi-307909/secrets/mch_content_uri/versions/latest"}
-)
+).payload.data.decode("utf-8")
 
 # Generate DB engines
 mycarehub_engine = create_engine(
