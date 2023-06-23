@@ -236,6 +236,7 @@ airflow:
     - "pluggy==1.2.0"
     - "google-api-core==2.11.0"
     - "google-auth===2.15.0"
+    - "pymysql==1.0.3"
 
   ## pip packages that are protected from upgrade/downgrade by `extraPipPackages`
   ## - [WARNING] Pods will fail to start if `extraPipPackages` would cause these packages to change versions

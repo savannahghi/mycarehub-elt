@@ -47,7 +47,7 @@ service_requests_load = PythonOperator(
 )
 
 service_requests_staging = PythonOperator(
-    task_id="mch_patients_staging",
+    task_id="mch_servicerequests_staging",
     python_callable=run.trigger_staging,
     op_kwargs={'folder': config.mch_service_requests_staging_fold,
                'dataset': config.mch_service_requests_dset},
