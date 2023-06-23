@@ -61,7 +61,10 @@ airflow:
   ##     # ether environment variables
   ##     HTTP_PROXY: "http://proxy.example.com:8080"
   ##
-  config: {}
+  config: 
+    AIRFLOW__LOGGING__REMOTE_LOGGING: "True"
+    AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER: "gs://logs-airflow/airflow/logs"
+    AIRFLOW__LOGGING__REMOTE_LOG_CONN_ID: "gcp_connection"
 
   ## a list of users to create
   ## - templates can ONLY be used in: `password`, `email`, `firstName`, `lastName`
@@ -116,7 +119,17 @@ airflow:
   ##           "aws_secret_access_key": "${AWS_ACCESS_KEY}",
   ##           "region_name":"eu-central-1" }
   ##
-  connections: []
+  connections:
+    - id: gcp_connection
+      type: google_cloud_platform
+      description: Connection to GCP
+      
+      ## see the official "google_cloud_platform" connection docs for valid extra configs
+      extra: |
+        {
+          "extra__google_cloud_platform__key_path": "/secrets/gcp/key.json",
+          "extra__google_cloud_platform__num_retries": 5
+        }
 
   ## bash-like templates to be used in `airflow.connections`
   ## - see docs for `airflow.usersTemplates`
@@ -1004,7 +1017,7 @@ workers:
     ## if the log-cleanup sidecar is enabled
     ## - [WARNING] must be disabled if `logs.persistence.enabled` is `true`
     ##
-    enabled: true
+    enabled: false
 
     ## resource requests/limits for the log-cleanup container
     ## - spec of ResourceRequirements:
@@ -1316,14 +1329,6 @@ logs:
     ##
     enabled: false
 
-    ## the name of an existing PVC to use
-    ##
-    existingClaim: ""
-
-    ## sub-path under `logs.persistence.existingClaim` to use
-    ##
-    subPath: ""
-
     ## the name of the StorageClass used by the PVC
     ## - if set to "", then `PersistentVolumeClaim/spec.storageClassName` is omitted
     ## - if set to "-", then `PersistentVolumeClaim/spec.storageClassName` is set to ""
@@ -1333,11 +1338,12 @@ logs:
     ## the access mode of the PVC
     ## - [WARNING] must be "ReadWriteMany" or airflow pods will fail to start
     ##
-    accessMode: ReadWriteMany
+    accessModes:
+      - ReadWriteOnce
 
     ## the size of PVC to request
     ##
-    size: 1Gi
+    size: 2Gi
 
 ###################################
 ## CONFIG | Airflow DAGs
