@@ -35,5 +35,3 @@ helm upgrade \
     -f ./charts/airflow/values.yaml \
     $APP_NAME \
     airflow-stable/airflow
-
-# kubectl create secret generic airflow-ssh-git-secret --namespace airflow --from-file=id_rsa=$HOME/.ssh/id_rsa

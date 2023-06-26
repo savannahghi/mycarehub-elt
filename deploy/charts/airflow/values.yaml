@@ -242,7 +242,7 @@ airflow:
     - "tox~=3.14"
     - "Flask-Bcrypt==0.7.1"
     - "oauth2client~=4.1"
-    - "fastparquet~=0.5"
+    - "fastparquet==0.8.1"
     - "coverage~=5.5"
     - "toml==0.10.2"
     - "python-dateutil>=2.8.1"
@@ -1503,7 +1503,11 @@ ingress:
   web:
     ## annotations for the web Ingress
     ##
-    annotations: {}
+    annotations: 
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      konghq.com/protocols: "https"
+      konghq.com/https-redirect-status-code: "308"
 
     ## additional labels for the web Ingress
     ##
@@ -1532,11 +1536,11 @@ ingress:
     tls:
       ## enable TLS termination for the web Ingress
       ##
-      enabled: false
+      enabled: true
 
       ## the name of a pre-created Secret containing a TLS private key and certificate
       ##
-      secretName: ""
+      secretName: "letsencrypt-prod"
 
     ## http paths to add to the web Ingress before the default path
     ##
