@@ -230,7 +230,7 @@ airflow:
   ##
   extraPipPackages:
     - "google-cloud-bigquery>=2.19.0"
-    - "SQLAlchemy==1.4.22"
+    - "SQLAlchemy==1.4.35"
     - "pytest==7.3.2"
     - "pybigquery==0.10.1"
     - "psycopg2-binary~=2.8"
@@ -1941,12 +1941,12 @@ postgresql:
   image:
     registry: ghcr.io
     repository: airflow-helm/postgresql-bitnami
-    tag: 11.16-patch.0
+    tag: latest
     pullPolicy: IfNotPresent
 
   ## the postgres database to use
   ##
-  postgresqlDatabase: airflow
+  postgresqlDatabase: airflow-prod
 
   ## the postgres user to create
   ##

@@ -30,7 +30,7 @@ helm upgrade \
     --create-namespace \
     --namespace "${NAMESPACE}" \
     --wait \
-    --version "8.7.1" \
+    --version 8.8.0 \
     --timeout 1200s \
     -f ./charts/airflow/values.yaml \
     $APP_NAME \
