@@ -31,7 +31,7 @@ odk_ext = PythonOperator(
     task_id="odk_extract_to_gcs",
     python_callable=trigger.trigger_to_gcs,
     op_kwargs={'folder': config.odk_data_fold,
-               'engine': db_engines.odk_engine,
+               'engine': db_engines.get_engine("odk_engine"),
                'bucket': config.odk_data_bket},
     dag=etl_dag
 )

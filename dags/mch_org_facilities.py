@@ -31,7 +31,7 @@ org_facilities_ext = PythonOperator(
     task_id="facilities_orgs_extract_to_gcs",
     python_callable=trigger.trigger_to_gcs,
     op_kwargs={'folder': config.mch_fac_org_fold,
-               'engine': db_engines.mycarehub_engine,
+               'engine': db_engines.get_engine("mycarehub_engine"),
                'bucket': config.mch_fac_org_bket},
     dag=etl_dag
 )
@@ -45,5 +45,24 @@ org_facilities_load = PythonOperator(
     dag=etl_dag
 )
 
+org_facilities_ext_v2 = PythonOperator(
+    task_id="facilities_orgs_extract_to_gcs_v2",
+    python_callable=trigger.trigger_to_gcs,
+    op_kwargs={'folder': config.mch_fac_org_fold_v2,
+               'engine': db_engines.get_engine("mycarehub_engine_v2"),
+               'bucket': config.mch_fac_org_bket_v2},
+    dag=etl_dag
+)
+
+org_facilities_load_v2 = PythonOperator(
+    task_id="facilities_orgs_load_to_bquery_v2",
+    python_callable=trigger.trigger_to_bquery,
+    op_kwargs={'folder': config.mch_fac_org_fold_v2,
+               'dataset': config.mch_fac_org_dset_v2,
+               'bucket': config.mch_fac_org_bket_v2},
+    dag=etl_dag
+)
+
 # Task Dependencies
 org_facilities_ext >> org_facilities_load
+org_facilities_ext_v2 >> org_facilities_load_v2

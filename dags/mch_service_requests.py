@@ -29,16 +29,16 @@ etl_dag = DAG(
 )
 
 service_requests_ext = PythonOperator(
-    task_id="facilities_orgs_extract_to_gcs",
+    task_id="service_requests_extract_to_gcs",
     python_callable=trigger.trigger_to_gcs,
     op_kwargs={'folder': config.mch_service_requests_fold,
-               'engine': db_engines.mycarehub_engine,
+               'engine': db_engines.get_engine("mycarehub_engine"),
                'bucket': config.mch_service_requests_bket},
     dag=etl_dag
 )
 
 service_requests_load = PythonOperator(
-    task_id="facilities_orgs_load_to_bquery",
+    task_id="service_requests_load_to_bquery",
     python_callable=trigger.trigger_to_bquery,
     op_kwargs={'folder': config.mch_service_requests_fold,
                'dataset': config.mch_service_requests_dset,
@@ -47,12 +47,38 @@ service_requests_load = PythonOperator(
 )
 
 service_requests_staging = PythonOperator(
-    task_id="mch_patients_staging",
+    task_id="mch_service_requests_staging",
     python_callable=run.trigger_staging,
     op_kwargs={'folder': config.mch_service_requests_staging_fold,
                'dataset': config.mch_service_requests_dset},
     dag=etl_dag
 )
 
+service_requests_ext_v2 = PythonOperator(
+    task_id="service_requests_extract_to_gcs_v2",
+    python_callable=trigger.trigger_to_gcs,
+    op_kwargs={'folder': config.mch_service_requests_fold_v2,
+               'engine': db_engines.get_engine("mycarehub_engine_v2"),
+               'bucket': config.mch_service_requests_bket_v2},
+    dag=etl_dag
+)
+
+service_requests_load_v2 = PythonOperator(
+    task_id="service_requests_load_to_bquery_v2",
+    python_callable=trigger.trigger_to_bquery,
+    op_kwargs={'folder': config.mch_service_requests_fold_v2,
+               'dataset': config.mch_service_requests_dset_v2,
+               'bucket': config.mch_service_requests_bket_v2},
+    dag=etl_dag
+)
+
+service_requests_staging_v2 = PythonOperator(
+    task_id="mch_service_requests_staging_v2",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.mch_service_requests_staging_fold_v2,
+               'dataset': config.mch_service_requests_dset_v2},
+    dag=etl_dag
+)
 # Task Dependencies
 service_requests_ext >> service_requests_load >> service_requests_staging
+service_requests_ext_v2 >> service_requests_load_v2 >> service_requests_staging_v2

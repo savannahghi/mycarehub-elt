@@ -42,6 +42,22 @@ assessment_staging = PythonOperator(
                'dataset': config.GA_assessment_tool_dset},
     dag=etl_dag
 )
+assessment_extraction_v2 = PythonOperator(
+    task_id="Extract_assessment_from_GA_events_v2",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.GA_assessment_tool_fold_v2,
+               'dataset': config.GA_assessment_tool_dset_v2},
+    dag=etl_dag
+)
+
+assessment_staging_v2 = PythonOperator(
+    task_id="stage_assessment_tool_events_v2",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.GA_assessment_tool_staging_fold_v2,
+               'dataset': config.GA_assessment_tool_dset_v2},
+    dag=etl_dag
+)
 
 # Task Dependencies
 assessment_extraction >> assessment_staging
+assessment_extraction_v2 >> assessment_staging_v2
