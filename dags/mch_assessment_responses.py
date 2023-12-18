@@ -20,36 +20,36 @@ default_args = {
 }
 
 etl_dag = DAG(
-    dag_id="test_dag",
-    description="Registered users on Mycarehub",
+    dag_id="mch_assessment_responses",
+    description="Assessment responses on Mycarehub",
     schedule_interval="0 */4 * * *",
     default_args=default_args,
     catchup=False,
 )
 
-users_ext = PythonOperator(
-    task_id="users_extract_to_gcs",
+assessment_responses_ext = PythonOperator(
+    task_id="assessment_responses_extract_to_gcs",
     python_callable=trigger.trigger_to_gcs,
-    op_kwargs={'folder': config.mch_users_fold,
+    op_kwargs={'folder': config.mch_assessment_responses_fold,
                'engine': db_engines.mycarehub_engine,
-               'bucket': config.mch_users_bket},
+               'bucket': config.mch_assessment_responses_bket},
     dag=etl_dag
 )
 
-users_load = PythonOperator(
-    task_id="users_load_to_bquery",
+assessment_responses_load = PythonOperator(
+    task_id="assessment_responses_load_to_bquery",
     python_callable=trigger.trigger_to_bquery,
-    op_kwargs={'folder': config.mch_users_fold,
-               'dataset': config.mch_users_dset,
-               'bucket': config.mch_users_bket},
+    op_kwargs={'folder': config.mch_assessment_responses_fold,
+               'dataset': config.mch_assessment_responses_dset,
+               'bucket': config.mch_assessment_responses_bket},
     dag=etl_dag
 )
-patients_staging = PythonOperator(
-    task_id="mch_patients_staging",
+assessment_responses_staging = PythonOperator(
+    task_id="mch_assessment_responses_staging",
     python_callable=run.trigger_staging,
-    op_kwargs={'folder': config.mch_users_staging_fold,
-               'dataset': config.mch_users_dset},
+    op_kwargs={'folder': config.mch_assessment_responses_staging_fold,
+               'dataset': config.mch_assessment_responses_dset},
     dag=etl_dag
 )
 # Task Dependencies
-users_ext >> users_load >> patients_staging
+assessment_responses_ext >> assessment_responses_load >> assessment_responses_staging

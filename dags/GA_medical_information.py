@@ -20,28 +20,28 @@ default_args = {
 }
 
 etl_dag = DAG(
-    dag_id="ga_content_engagement",
-    description="Content on Mycarehub from Google Analytics",
+    dag_id="ga_medical_information",
+    description="Medical Information on Mycarehub from Google Analytics",
     schedule_interval="0 */4 * * *",
     default_args=default_args,
     catchup=False,
 )
 
-content_extraction = PythonOperator(
-    task_id="Extract_content_from_GA_events",
+medical_information_extraction = PythonOperator(
+    task_id="Extract_medical_information_from_GA_events",
     python_callable=run.trigger_staging,
-    op_kwargs={'folder': config.GA_content_engagement_fold,
-               'dataset': config.GA_content_engagement_dset},
+    op_kwargs={'folder': config.GA_medical_information_fold,
+               'dataset': config.GA_medical_information_dset},
     dag=etl_dag
 )
 
-content_staging = PythonOperator(
-    task_id="stage_content_engagement_events",
+medical_information_staging = PythonOperator(
+    task_id="stage_medical_information_events",
     python_callable=run.trigger_staging,
-    op_kwargs={'folder': config.GA_content_engagement_staging_fold,
-               'dataset': config.GA_content_engagement_dset},
+    op_kwargs={'folder': config.GA_medical_information_staging_fold,
+               'dataset': config.GA_medical_information_dset},
     dag=etl_dag
 )
 
 # Task Dependencies
-content_extraction >> content_staging
+medical_information_extraction >> medical_information_staging
