@@ -43,6 +43,22 @@ content_staging = PythonOperator(
     dag=etl_dag
 )
 
+content_extraction_v2 = PythonOperator(
+    task_id="Extract_content_from_GA_events_v2",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.GA_content_engagement_fold_v2,
+               'dataset': config.GA_content_engagement_dset_v2},
+    dag=etl_dag
+)
+
+content_staging_v2 = PythonOperator(
+    task_id="stage_content_engagement_events_v2",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.GA_content_engagement_staging_fold_v2,
+               'dataset': config.GA_content_engagement_dset_v2},
+    dag=etl_dag
+)
+
 # Task Dependencies
 content_extraction >> content_staging
-
+content_extraction_v2 >> content_staging_v2
