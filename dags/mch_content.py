@@ -31,7 +31,7 @@ content_ext = PythonOperator(
     task_id="content_extract_to_gcs",
     python_callable=trigger.trigger_to_gcs,
     op_kwargs={'folder': config.mch_content_fold,
-               'engine': db_engines.mycarehub_content_engine,
+               'engine': db_engines.get_engine("mycarehub_content_engine"),
                'bucket': config.mch_content_bket},
     dag=etl_dag
 )
@@ -51,5 +51,30 @@ content_staging = PythonOperator(
                'dataset': config.mch_content_dset},
     dag=etl_dag
 )
+content_ext_v2 = PythonOperator(
+    task_id="content_extract_to_gcs_v2",
+    python_callable=trigger.trigger_to_gcs,
+    op_kwargs={'folder': config.mch_content_fold_v2,
+               'engine': db_engines.get_engine("mycarehub_content_engine_v2"),
+               'bucket': config.mch_content_bket_v2},
+    dag=etl_dag
+)
+
+content_load_v2 = PythonOperator(
+    task_id="content_load_to_bquery_v2",
+    python_callable=trigger.trigger_to_bquery,
+    op_kwargs={'folder': config.mch_content_fold_v2,
+               'dataset': config.mch_content_dset_v2,
+               'bucket': config.mch_content_bket_v2},
+    dag=etl_dag
+)
+content_staging_v2 = PythonOperator(
+    task_id="mch_content_staging_v2",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.mch_content_staging_fold_v2,
+               'dataset': config.mch_content_dset_v2},
+    dag=etl_dag
+)
 # Task Dependencies
 content_ext >> content_load >> content_staging
+content_ext_v2 >> content_load_v2 >> content_staging_v2

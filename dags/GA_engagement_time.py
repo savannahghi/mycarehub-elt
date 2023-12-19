@@ -42,6 +42,22 @@ engagement_time_staging = PythonOperator(
                'dataset': config.GA_engagement_time_dset},
     dag=etl_dag
 )
+engagement_time_extraction_v2 = PythonOperator(
+    task_id="Extract_engagement_time_from_GA_events_v2",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.GA_engagement_time_fold_v2,
+               'dataset': config.GA_engagement_time_dset_v2},
+    dag=etl_dag
+)
+
+engagement_time_staging_v2 = PythonOperator(
+    task_id="stage_engagement_time_events_v2",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.GA_engagement_time_staging_fold_v2,
+               'dataset': config.GA_engagement_time_dset_v2},
+    dag=etl_dag
+)
 
 # Task Dependencies
 engagement_time_extraction >> engagement_time_staging
+engagement_time_extraction_v2 >> engagement_time_staging_v2

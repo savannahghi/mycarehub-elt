@@ -31,7 +31,7 @@ patients_ext = PythonOperator(
     task_id="patients_extract_to_gcs",
     python_callable=trigger.trigger_to_gcs,
     op_kwargs={'folder': config.emr_patients_fold,
-               'engine': db_engines.openmrs_engine,
+               'engine': db_engines.get_engine("mycarehub_engine"),
                'bucket': config.emr_patients_bket},
     dag=etl_dag
 )

@@ -1,34 +1,38 @@
 """Fetch Database URIs and Create SQLAlchemy Engines."""
+import toml
 from google.cloud import secretmanager
 from sqlalchemy.engine import create_engine
+
+from pipelines.utils import google_clients
 
 # Retrieve URIs from Secret Manager
 secret_manager_client = secretmanager.SecretManagerServiceClient()
 
-mch_cloudsql_uri = secret_manager_client.access_secret_version(
-    request={"name": "projects/sghi-307909/secrets/mch_cloudsql_uri/versions/latest"}
-).payload.data.decode("utf-8")
-openmrs_cloudsql_uri = secret_manager_client.access_secret_version(
-    request={
-        "name": "projects/sghi-307909/secrets/openmrs_cloudsql_uri/versions/latest"}
-).payload.data.decode("utf-8")
-odk_cloudsql_uri = secret_manager_client.access_secret_version(
-    request={"name": "projects/sghi-307909/secrets/odk_cloudsql_uri/versions/latest"}
-).payload.data.decode("utf-8")
-mch_content_uri = secret_manager_client.access_secret_version(
-    request={"name": "projects/sghi-307909/secrets/mch_content_uri/versions/latest"}
-).payload.data.decode("utf-8")
+# get & deserialize config.toml from gcs
+c_client = google_clients.initialize_gcs_client()
+c_bucket = c_client.get_bucket("mycarehub-queries")
+c_blob = c_bucket.get_blob("config/db_engines.toml")
+toml_string = c_blob.download_as_bytes().decode("utf-8")
+parsed_config = toml.loads(toml_string)
 
-# Generate DB engines
-mycarehub_engine = create_engine(
-    mch_cloudsql_uri,
-)
-openmrs_engine = create_engine(
-    openmrs_cloudsql_uri,
-)
-odk_engine = create_engine(
-    odk_cloudsql_uri,
-)
-mycarehub_content_engine = create_engine(
-    mch_content_uri,
-)
+# parse through config keys and dynamically create variables
+
+
+def get_engine(engine_key):
+    engine_uri = secret_manager_client.access_secret_version(
+        f"projects/sghi-307909/secrets/{parsed_config[engine_key]['engine_uri']}/versions/1"
+    ).payload.data.decode("utf-8")
+
+    db = "POSTGRES"
+    if "db_type" in parsed_config[engine_key]:
+        db = parsed_config[engine_key]["db_type"]
+
+    if db == "POSTGRES":
+        return create_engine(
+            engine_uri,
+            connect_args={"options": f"-c statement_timeout={parsed_config[engine_key]['timeout']}"},
+        )
+    else:
+        return create_engine(
+            engine_uri,
+        )

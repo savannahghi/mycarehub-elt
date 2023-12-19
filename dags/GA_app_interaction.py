@@ -27,21 +27,39 @@ etl_dag = DAG(
     catchup=False,
 )
 
-content_extraction = PythonOperator(
-    task_id="Extract_content_from_GA_events",
+GA_app_interaction_extraction = PythonOperator(
+    task_id="Extract_app_interaction_from_GA_events",
     python_callable=run.trigger_staging,
     op_kwargs={'folder': config.GA_app_interaction_fold,
                'dataset': config.GA_app_interaction_dset},
     dag=etl_dag
 )
 
-content_staging = PythonOperator(
-    task_id="stage_content_engagement_events",
+GA_app_interaction_staging = PythonOperator(
+    task_id="stage_app_interaction_engagement_events",
     python_callable=run.trigger_staging,
     op_kwargs={'folder': config.GA_app_interaction_staging_fold,
                'dataset': config.GA_app_interaction_dset},
     dag=etl_dag
 )
+GA_app_interaction_extraction_v2 = PythonOperator(
+    task_id="Extract_app_interaction_from_GA_events_v2",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.GA_app_interaction_fold_v2,
+               'dataset': config.GA_app_interaction_dset_v2},
+    dag=etl_dag
+)
+
+GA_app_interaction_staging_v2 = PythonOperator(
+    task_id="stage_app_interaction_engagement_events_v2",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.GA_app_interaction_staging_fold_v2,
+               'dataset': config.GA_app_interaction_dset_v2},
+    dag=etl_dag
+)
 
 # Task Dependencies
-content_extraction >> content_staging
+GA_app_interaction_extraction >> GA_app_interaction_staging
+GA_app_interaction_extraction_v2 >> GA_app_interaction_staging_v2
+
+
