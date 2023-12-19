@@ -20,7 +20,7 @@ parsed_config = toml.loads(toml_string)
 
 def get_engine(engine_key):
     engine_uri = secret_manager_client.access_secret_version(
-        f"projects/sghi-307909/secrets/{parsed_config[engine_key]['engine_uri']}/versions/1"
+        request={"name": f"projects/sghi-307909/secrets/{parsed_config[engine_key]['engine_uri']}/versions/1"}
     ).payload.data.decode("utf-8")
 
     db = "POSTGRES"
