@@ -31,7 +31,7 @@ assessment_responses_ext = PythonOperator(
     task_id="assessment_responses_extract_to_gcs",
     python_callable=trigger.trigger_to_gcs,
     op_kwargs={'folder': config.mch_assessment_responses_fold,
-               'engine': db_engines.mycarehub_engine,
+               'engine': db_engines.get_engine("mycarehub_engine"),
                'bucket': config.mch_assessment_responses_bket},
     dag=etl_dag
 )
@@ -51,6 +51,31 @@ assessment_responses_staging = PythonOperator(
                'dataset': config.mch_assessment_responses_dset},
     dag=etl_dag
 )
+assessment_responses_ext_v2 = PythonOperator(
+    task_id="assessment_responses_extract_to_gcs_v2",
+    python_callable=trigger.trigger_to_gcs,
+    op_kwargs={'folder': config.mch_assessment_responses_fold_v2,
+               'engine': db_engines.get_engine("mycarehub_engine_v2"),
+               'bucket': config.mch_assessment_responses_bket_v2},
+    dag=etl_dag
+)
+
+assessment_responses_load_v2 = PythonOperator(
+    task_id="assessment_responses_load_to_bquery_v2",
+    python_callable=trigger.trigger_to_bquery,
+    op_kwargs={'folder': config.mch_assessment_responses_fold_v2,
+               'dataset': config.mch_assessment_responses_dset_v2,
+               'bucket': config.mch_assessment_responses_bket_v2},
+    dag=etl_dag
+)
+assessment_responses_staging_v2 = PythonOperator(
+    task_id="mch_assessment_responses_staging_v2",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.mch_assessment_responses_staging_fold_v2,
+               'dataset': config.mch_assessment_responses_dset_v2},
+    dag=etl_dag
+)
+
 # Task Dependencies
 assessment_responses_ext >> assessment_responses_load >> assessment_responses_staging
-
+assessment_responses_ext_v2 >> assessment_responses_load_v2 >> assessment_responses_staging_v2

@@ -43,5 +43,22 @@ medical_information_staging = PythonOperator(
     dag=etl_dag
 )
 
+medical_information_extraction_v2 = PythonOperator(
+    task_id="Extract_medical_information_from_GA_events_v2",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.GA_medical_information_fold_v2,
+               'dataset': config.GA_medical_information_dset_v2},
+    dag=etl_dag
+)
+
+medical_information_staging_v2 = PythonOperator(
+    task_id="stage_medical_information_events_v2",
+    python_callable=run.trigger_staging,
+    op_kwargs={'folder': config.GA_medical_information_staging_fold_v2,
+               'dataset': config.GA_medical_information_dset_v2},
+    dag=etl_dag
+)
+
 # Task Dependencies
 medical_information_extraction >> medical_information_staging
+medical_information_extraction_v2 >> medical_information_staging_v2
